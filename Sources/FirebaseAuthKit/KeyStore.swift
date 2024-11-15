@@ -101,3 +101,14 @@ final class KeyStore: Sendable {
         }
     }
 }
+
+extension KeyStore {
+    internal var cachedKeys: [String: String] {
+        certificates.withLock { $0 }
+    }
+    
+    internal func setCachedKeys(_ keys: [String: String]) {
+        certificates.withLock { $0 = keys }
+        lastFetchTime.withLock { $0 = Date() }
+    }
+}

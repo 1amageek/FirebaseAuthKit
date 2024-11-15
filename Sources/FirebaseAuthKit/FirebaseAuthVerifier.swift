@@ -122,3 +122,20 @@ public actor FirebaseAuthVerifier {
 extension FirebaseTokenPayload: JWTPayload {
     public func verify(using signer: some JWTAlgorithm) throws { }
 }
+
+// MARK: - Test
+
+extension FirebaseAuthVerifier {
+    internal func parseToken(_ token: String) throws -> (header: JWTHeader, payload: FirebaseTokenPayload) {
+        let parts = token.split(separator: ".")
+        guard parts.count == 3,
+              let headerData = Data(base64Encoded: String(parts[0])),
+              let payloadData = Data(base64Encoded: String(parts[1])) else {
+            throw FirebaseAuthError.invalidToken
+        }
+        
+        let header = try JSONDecoder().decode(JWTHeader.self, from: headerData)
+        let payload = try JSONDecoder().decode(FirebaseTokenPayload.self, from: payloadData)
+        return (header, payload)
+    }
+}

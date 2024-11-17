@@ -14,6 +14,7 @@
 - 🧩 Modular design for easy integration
 - 🎯 Swift Concurrency support out of the box
 - 🔄 Automatic key rotation handling
+- 🧪 Firebase Auth Emulator support
 
 ## 📋 Requirements
 
@@ -29,7 +30,7 @@ Add this to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/yourusername/firebase-auth-kit.git", from: "1.0.0")
+    .package(url: "https://github.com/1amageek/firebase-auth-kit.git", from: "1.0.0")
 ]
 ```
 
@@ -46,7 +47,7 @@ targets: [
 
 ## 🚀 Quick Start
 
-### Basic Setup
+### Production Setup
 
 ```swift
 import FirebaseAuthKit
@@ -55,7 +56,7 @@ import AsyncHTTPClient
 // Initialize HTTP client
 let httpClient = HTTPClient(eventLoopGroupProvider: .singleton)
 
-// Configure Firebase
+// Configure Firebase for production
 let config = FirebaseConfig(
     projectId: "your-project-id",
     apiKey: "your-api-key"
@@ -65,18 +66,33 @@ let config = FirebaseConfig(
 let verifier = FirebaseAuthVerifier(config: config, httpClient: httpClient)
 ```
 
-### Token Verification
+### Local Development with Emulator
 
+1. First, set up Firebase Auth Emulator in your `.env`:
+```env
+FIREBASE_AUTH_EMULATOR_HOST=localhost:9099
+```
+
+2. Load the environment variable in your app:
 ```swift
-let token = "firebase-id-token"
+import Foundation
+import FirebaseAuthKit
+import AsyncHTTPClient
 
-do {
-    let verifiedToken = try await verifier.verify(token)
-    print("✅ Verified user ID: \(verifiedToken.uid)")
-    print("📧 Email: \(verifiedToken.email ?? "Not available")")
-} catch {
-    print("❌ Verification failed: \(error)")
-}
+// Environment variables will be automatically detected
+let config = FirebaseConfig(
+    projectId: "demo-project",
+    apiKey: "demo-key"
+)
+
+// Or explicitly specify emulator
+let config = FirebaseConfig(
+    projectId: "demo-project",
+    apiKey: "demo-key",
+    environment: .emulator(host: "localhost:9099")
+)
+
+let verifier = FirebaseAuthVerifier(config: config, httpClient: httpClient)
 ```
 
 ### 🌐 Vapor Integration
@@ -87,6 +103,20 @@ import FirebaseAuthVapor
 
 // Configure Vapor app
 let app = try Application(.detect())
+defer { app.shutdown() }
+
+// Setup HTTPClient
+let httpClient = HTTPClient(eventLoopGroupProvider: .singleton)
+defer { try? httpClient.syncShutdown() }
+
+// Setup Firebase config (automatically detects emulator from environment)
+let config = FirebaseConfig(
+    projectId: "your-project-id",
+    apiKey: "your-api-key"
+)
+
+// Create verifier
+let verifier = FirebaseAuthVerifier(config: config, httpClient: httpClient)
 
 // Set up Firebase Auth middleware
 let authMiddleware = FirebaseAuthVaporMiddleware(verifier: verifier)
@@ -100,27 +130,32 @@ protected.get("profile") { req -> String in
     }
     return "👋 Welcome, \(user.uid)!"
 }
+
+try app.run()
 ```
 
-## 🛠 Advanced Usage
+## 🧪 Testing with Firebase Auth Emulator
 
-### Custom Claims Handling
-
-```swift
-if let role = verifiedToken.claims?["role"] {
-    print("👤 User role: \(role)")
-}
+1. Start the Firebase Emulator:
+```bash
+firebase emulators:start
 ```
 
-### Cache Configuration
+2. Set environment variable:
+```bash
+export FIREBASE_AUTH_EMULATOR_HOST=localhost:9099
+```
 
+3. Special testing features in emulator mode:
 ```swift
-let keyStore = KeyStore(
-    httpClient: httpClient,
-    maxKeys: 100,           // Maximum number of cached keys
-    validityDuration: 3600, // Cache duration in seconds
-    keysURL: "custom-url"   // Optional: custom keys URL
-)
+// Use "owner" token for admin access in tests
+let ownerToken = "owner"
+let verifiedToken = try await verifier.verify(ownerToken)
+// Returns a token with admin claims
+
+// Regular tokens in emulator mode skip signature verification
+let testToken = "test.token.signature"
+let verifiedTestToken = try await verifier.verify(testToken)
 ```
 
 ## ⚠️ Error Handling
@@ -129,11 +164,11 @@ FirebaseAuthKit provides clear error cases:
 
 ```swift
 enum FirebaseAuthError: Error {
-    case invalidToken        // ❌ Token format is invalid
-    case missingToken       // 🚫 Token not found
-    case tokenExpired       // ⏰ Token has expired
-    case invalidIssuer      // 🔒 Invalid token issuer
-    case invalidAudience    // 👥 Invalid token audience
+    case invalidToken       // ❌ Token format is invalid
+    case missingToken      // 🚫 Token not found
+    case tokenExpired      // ⏰ Token has expired
+    case invalidIssuer     // 🔒 Invalid token issuer
+    case invalidAudience   // 👥 Invalid token audience
     case verificationFailed // 💥 Verification process failed
 }
 ```
@@ -145,38 +180,11 @@ enum FirebaseAuthError: Error {
 3. 🛑 **Shutdown Management**: Properly shutdown HTTPClient when your application terminates
 4. 🔒 **Security**: Always validate tokens on the server side
 5. ⚡️ **Performance**: Utilize the built-in caching mechanism for optimal performance
-
-## 🤝 Contributing
-
-We welcome contributions! Here's how you can help:
-
-1. 🐛 Report bugs
-2. 💡 Suggest new features
-3. 📝 Improve documentation
-4. 🔧 Submit pull requests
-
-## 📘 Documentation
-
-For detailed documentation, visit our [GitHub Wiki](wiki-link).
+6. 🧪 **Testing**: Use Firebase Auth Emulator for local development and testing
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## ❓ Support
-
-- 📫 Open an issue for bug reports
-- 💭 Start a discussion for feature requests
-- 🤔 Check existing issues before opening a new one
-
-## 🌟 Show Your Support
-
-Give a ⭐️ if this project helped you!
-
-## 📊 Stats
-
-![GitHub Stars](https://img.shields.io/github/stars/yourusername/firebase-auth-kit?style=social)
-![GitHub Forks](https://img.shields.io/github/forks/yourusername/firebase-auth-kit?style=social)
 
 ---
 

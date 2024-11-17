@@ -13,10 +13,7 @@ import Foundation
 /// to verify authentication tokens.
 public struct FirebaseConfig {
     /// The Firebase project ID.
-    public let projectId: String
-    
-    /// The API key for the Firebase project.
-    public let apiKey: String
+    public let projectID: String
     
     /// The URL to fetch the public keys used for token verification.
     public let keysURL: String
@@ -27,18 +24,15 @@ public struct FirebaseConfig {
     /// Creates a new instance of `FirebaseConfig`.
     ///
     /// - Parameters:
-    ///   - projectId: The Firebase project ID.
-    ///   - apiKey: The API key for the Firebase project.
+    ///   - projectID: The Firebase project ID.
     ///   - environment: The Firebase Auth environment (default: determined by FIREBASE_AUTH_EMULATOR_HOST)
     ///   - keysURL: (Optional) The URL to fetch public keys.
     public init(
-        projectId: String,
-        apiKey: String,
+        projectID: String,
         environment: FirebaseAuthEnvironment = .current,
         keysURL: String = "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
     ) {
-        self.projectId = projectId
-        self.apiKey = apiKey
+        self.projectID = projectID
         self.keysURL = keysURL
         self.environment = environment
     }

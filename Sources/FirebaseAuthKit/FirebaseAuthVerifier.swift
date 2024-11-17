@@ -126,11 +126,11 @@ public actor FirebaseAuthVerifier {
         }
         
         if !FirebaseAuthEnvironment.current.useEmulator {
-            guard payload.iss == "https://securetoken.google.com/\(config.projectId)" else {
+            guard payload.iss == "https://securetoken.google.com/\(config.projectID)" else {
                 throw FirebaseAuthError.invalidIssuer
             }
             
-            guard payload.aud == config.projectId else {
+            guard payload.aud == config.projectID else {
                 throw FirebaseAuthError.invalidAudience
             }
         }

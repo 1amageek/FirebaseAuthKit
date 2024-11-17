@@ -15,9 +15,9 @@ struct FirebaseAuthConstants {
     static let minSessionCookieDurationSecs = 5 * 60
     static let maxSessionCookieDurationSecs = 14 * 24 * 60 * 60
     static let maxListProviderConfigurationPageSize = 100
-    static let firebaseAuthBaseURLFormat = "https://identitytoolkit.googleapis.com/{version}/projects/{projectId}{api}"
-    static let firebaseAuthEmulatorBaseURLFormat = "http://{host}/identitytoolkit.googleapis.com/{version}/projects/{projectId}{api}"
-    static let firebaseAuthTenantURLFormat = "https://identitytoolkit.googleapis.com/{version}/projects/{projectId}/tenants/{tenantId}{api}"
-    static let firebaseAuthEmulatorTenantURLFormat = "http://{host}/identitytoolkit.googleapis.com/{version}/projects/{projectId}/tenants/{tenantId}{api}"
+    static let firebaseAuthBaseURLFormat = "https://identitytoolkit.googleapis.com/{version}/projects/{projectID}{api}"
+    static let firebaseAuthEmulatorBaseURLFormat = "http://{host}/identitytoolkit.googleapis.com/{version}/projects/{projectID}{api}"
+    static let firebaseAuthTenantURLFormat = "https://identitytoolkit.googleapis.com/{version}/projects/{projectID}/tenants/{tenantId}{api}"
+    static let firebaseAuthEmulatorTenantURLFormat = "http://{host}/identitytoolkit.googleapis.com/{version}/projects/{projectID}/tenants/{tenantId}{api}"
     static let maxListTenantPageSize = 1000
 }

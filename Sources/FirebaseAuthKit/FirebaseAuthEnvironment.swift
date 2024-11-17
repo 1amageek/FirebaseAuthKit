@@ -30,36 +30,36 @@ public enum FirebaseAuthEnvironment {
     }
     
     /// Gets the base URL for Firebase Auth requests
-    func baseURL(version: String, projectId: String, api: String) -> String {
+    func baseURL(version: String, projectID: String, api: String) -> String {
         switch self {
         case .production:
             return FirebaseAuthConstants.firebaseAuthBaseURLFormat
                 .replacingOccurrences(of: "{version}", with: version)
-                .replacingOccurrences(of: "{projectId}", with: projectId)
+                .replacingOccurrences(of: "{projectID}", with: projectID)
                 .replacingOccurrences(of: "{api}", with: api)
         case .emulator(let host):
             return FirebaseAuthConstants.firebaseAuthEmulatorBaseURLFormat
                 .replacingOccurrences(of: "{host}", with: host)
                 .replacingOccurrences(of: "{version}", with: version)
-                .replacingOccurrences(of: "{projectId}", with: projectId)
+                .replacingOccurrences(of: "{projectID}", with: projectID)
                 .replacingOccurrences(of: "{api}", with: api)
         }
     }
     
     /// Gets the tenant-specific base URL for Firebase Auth requests
-    func tenantBaseURL(version: String, projectId: String, tenantId: String, api: String) -> String {
+    func tenantBaseURL(version: String, projectID: String, tenantId: String, api: String) -> String {
         switch self {
         case .production:
             return FirebaseAuthConstants.firebaseAuthTenantURLFormat
                 .replacingOccurrences(of: "{version}", with: version)
-                .replacingOccurrences(of: "{projectId}", with: projectId)
+                .replacingOccurrences(of: "{projectID}", with: projectID)
                 .replacingOccurrences(of: "{tenantId}", with: tenantId)
                 .replacingOccurrences(of: "{api}", with: api)
         case .emulator(let host):
             return FirebaseAuthConstants.firebaseAuthEmulatorTenantURLFormat
                 .replacingOccurrences(of: "{host}", with: host)
                 .replacingOccurrences(of: "{version}", with: version)
-                .replacingOccurrences(of: "{projectId}", with: projectId)
+                .replacingOccurrences(of: "{projectID}", with: projectID)
                 .replacingOccurrences(of: "{tenantId}", with: tenantId)
                 .replacingOccurrences(of: "{api}", with: api)
         }

@@ -58,8 +58,7 @@ let httpClient = HTTPClient(eventLoopGroupProvider: .singleton)
 
 // Configure Firebase for production
 let config = FirebaseConfig(
-    projectId: "your-project-id",
-    apiKey: "your-api-key"
+    projectID: "your-project-id"
 )
 
 // Create the verifier
@@ -81,14 +80,12 @@ import AsyncHTTPClient
 
 // Environment variables will be automatically detected
 let config = FirebaseConfig(
-    projectId: "demo-project",
-    apiKey: "demo-key"
+    projectID: "demo-project"
 )
 
 // Or explicitly specify emulator
 let config = FirebaseConfig(
-    projectId: "demo-project",
-    apiKey: "demo-key",
+    projectID: "demo-project",
     environment: .emulator(host: "localhost:9099")
 )
 
@@ -111,8 +108,7 @@ defer { try? httpClient.syncShutdown() }
 
 // Setup Firebase config (automatically detects emulator from environment)
 let config = FirebaseConfig(
-    projectId: "your-project-id",
-    apiKey: "your-api-key"
+    projectID: "your-project-id"
 )
 
 // Create verifier

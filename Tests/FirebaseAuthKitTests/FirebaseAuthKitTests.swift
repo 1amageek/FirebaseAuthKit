@@ -38,8 +38,7 @@ func testKeyStore() async throws {
 @Test("FirebaseAuthVerifier parses valid token")
 func testFirebaseAuthVerifierParsing() async throws {
     let config = FirebaseConfig(
-        projectId: "test-project",
-        apiKey: "test-key"
+        projectID: "test-project"
     )
     
     let httpClient = HTTPClient(eventLoopGroupProvider: .singleton)
@@ -98,8 +97,7 @@ func testFirebaseAuthVerifierParsing() async throws {
 @Test("FirebaseAuthVerifier rejects invalid token format")
 func testFirebaseAuthVerifierInvalidToken() async throws {
     let config = FirebaseConfig(
-        projectId: "test-project",
-        apiKey: "test-key"
+        projectID: "test-project"
     )
     
     let httpClient = HTTPClient(eventLoopGroupProvider: .singleton)
